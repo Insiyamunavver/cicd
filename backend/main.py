@@ -10,6 +10,8 @@ app = FastAPI(title="Linear Regression API")
 MODEL_PATH = Path(__file__).resolve().parent / "model" / "model.pkl"
 
 print(f"MODEL_PATH = {MODEL_PATH}")
+print(" NEW VERSION MAIN.PY")
+
 
 model = None
 
