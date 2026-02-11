@@ -1,28 +1,33 @@
-from fastapi import FastAPI
+rom fastapi import FastAPI
 from pydantic import BaseModel
 import pickle
-import numpy as np
 from pathlib import Path
+import numpy as np
+import os
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Linear Regression API")
 
-# ✅ Absolute robust model path
-BASE_DIR = Path(__file__).resolve().parent
-MODEL_PATH = (BASE_DIR / "model" / "model.pkl").resolve()
+# import os
+# MODEL_PATH = Path(os.getenv("MODEL_PATH", "model/model.pkl"))
 
-print(f"MODEL_PATH resolved to: {MODEL_PATH}")
+# MODEL_PATH = "/Users/tanyaagrawal/Downloads/mlops_pipeline/backened/model/model.pkl"
+MODEL_PATH = Path(os.getenv("MODEL_PATH", "model/model.pkl"))
 
-model = None
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://cicd-pipeline-1-bull.onrender.com"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-if MODEL_PATH.exists():
-    try:
-        with open(MODEL_PATH, "rb") as f:
-            model = pickle.load(f)
-        print(f"✅ Model loaded successfully")
-    except Exception as e:
-        print(f"❌ Error loading model: {e}")
-else:
-    print(f"⚠️ Model file not found")
+
+try:
+    with open(MODEL_PATH, "rb") as f:
+        model = pickle.load(f)
+except Exception as e:
+    raise RuntimeError(f"Failed to load model from {MODEL_PATH}: {e}")
 
 class InputData(BaseModel):
     area: float
@@ -34,11 +39,6 @@ def health_check():
 
 @app.post("/predict")
 def predict(data: InputData):
-
-    if model is None:
-        return {"error": "Model not loaded"}
-
     X = np.array([[data.area, data.bedrooms]])
     prediction = model.predict(X)[0]
-
     return {"predicted_price": float(prediction)}
