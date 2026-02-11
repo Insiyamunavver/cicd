@@ -27,7 +27,7 @@ else:
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://cicd-pipeline-1-bull.onrender.com"],
+    allow_origins=["https://cicd-service.onrender.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
