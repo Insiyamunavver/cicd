@@ -8,7 +8,8 @@ import os
 app = FastAPI(title="Linear Regression API")
 
 import os
-MODEL_PATH = Path(os.getenv("MODEL_PATH", "model/model.pkl"))
+MODEL_PATH = Path(os.getenv("MODEL_PATH",  "backend/model/model.pkl"))
+
 
 #MODEL_PATH = "C:/Users/Taha/OneDrive/Documents/mlops_pipeline/backend/model/model.pkl"
 try:
