@@ -1,4 +1,4 @@
-rom fastapi import FastAPI
+from fastapi import FastAPI
 from pydantic import BaseModel
 import pickle
 from pathlib import Path
