@@ -7,6 +7,15 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Linear Regression API")
 
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://cicd-frontend-act0.onrender.com"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 MODEL_PATH = Path(__file__).resolve().parent / "model" / "model.pkl"
 
 print(f"MODEL_PATH = {MODEL_PATH}")
@@ -25,13 +34,6 @@ if MODEL_PATH.exists():
 else:
     print("⚠️ model.pkl not found")
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["https://cicd-frontend-act0.onrender.com"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 class InputData(BaseModel):
     area: float
